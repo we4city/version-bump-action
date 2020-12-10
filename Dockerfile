@@ -1,8 +1,8 @@
 # Container image that runs your code
-FROM alpine:3.10
+FROM alpine:latest
 
 # Install git package
-#RUN apt-get update && apt-get install -y --no-install-recommends -y git
+RUN apt-get update && apt-get install -y bash
 RUN apk  add --no-cache git sed
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
