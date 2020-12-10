@@ -82,12 +82,12 @@ echo $newver > $version_file
 
 
 echo 'Update package.json'
-contents=$(jq ".version = \"${version}\"" package.json)
-echo "${contents}" > package.json
+package_contents=$(jq ".version = \"${newver}\"" package.json)
+echo "${package_contents}" > package.json
 
 echo 'Update src/composer.json'
-contents=$(jq ".version = \"${version}\"" src/composer.json)
-echo "${contents}" > src/composer.json
+composer_contents=$(jq ".version = \"${newver}\"" src/composer.json)
+echo "${composer_contents}" > src/composer.json
 
 
 git add -A 
