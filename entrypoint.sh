@@ -52,7 +52,7 @@ else
     echo "\nValid version string found " $extract_string
 fi
 
-
+# increment versions , usage 'increment_version 1.1.9' out: 1.2.0
 increment_version() {
     for v in $1 ; do
         num=${v//./}
