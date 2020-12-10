@@ -20,6 +20,9 @@ RUN yum -y remove git && yum -y install https://packages.endpoint.com/rhel/7/os/
     yum install -y git && \
     git --version
     
+# Install JQ
+RUN yum -y install jq
+    
 RUN yum clean all && \
     rm -rf /var/cache/yum
 
