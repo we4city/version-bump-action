@@ -9,9 +9,10 @@ fi
 
 
 
-file_name=$1
-tag_version=$2
-echo "\nInput file name: $file_name : $tag_version"
+version_file="VERSION"
+tag_version=$1
+
+echo "\nInput file name: $version_file : $tag_version"
 
 echo "Git Head Ref: ${GITHUB_HEAD_REF}"
 echo "Git Base Ref: ${GITHUB_BASE_REF}"
@@ -34,8 +35,8 @@ fi
 
 echo "Git Checkout"
 
-if test -f $file_name; then
-    content=$(cat $file_name)
+if test -f $version_file; then
+    content=$(cat $version_file)
 else
     content=$(echo "-- File doesn't exist --")
 fi
@@ -75,18 +76,29 @@ increment_version() {
 
 newver=$(increment_version $extract_string)
 
-echo $newver > $content
-echo 'Updated from' $extract_string ' to ' $newver
 
-#git add -A 
-#git commit -m "New Version ${newver}"  -m "[skip ci]"
+echo 'Updating from' $extract_string ' to ' $newver
+echo $newver > $version_file
 
-#([ -n "$tag_version" ] && [ "$tag_version" = "true" ]) && (git tag -a "${newver}" -m "[skip ci]") || echo "No tag created"
 
-#git show-ref
-#echo "Git Push"
+echo 'Update package.json'
+contents=$(jq ".version = \"${version}\"" package.json)
+echo "${contents}" > package.json
 
-#git push --follow-tags "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:$github_ref
+echo 'Update src/composer.json'
+contents=$(jq ".version = \"${version}\"" src/composer.json)
+echo "${contents}" > src/composer.json
+
+
+git add -A 
+git commit -m "New Version ${newver}"  -m "[skip ci]"
+
+([ -n "$tag_version" ] && [ "$tag_version" = "true" ]) && (git tag -a "${newver}" -m "[skip ci]") || echo "No tag created"
+
+git show-ref
+echo "Git Push"
+
+git push --follow-tags "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:$github_ref
 
 
 echo "\nEnd of Action\n\n"
