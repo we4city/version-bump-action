@@ -75,7 +75,7 @@ increment_version() {
 
 newver=$(increment_version $extract_string)
 
-
+echo $newver > $content
 echo 'Updated from' $extract_string ' to ' $newver
 
 #git add -A 
