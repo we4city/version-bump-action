@@ -80,7 +80,7 @@ newver=$(increment_version $extract_string)
 echo 'Updating from' $extract_string ' to ' $newver
 echo $newver > $version_file
 
-
+# TODO: improve the way it is done.
 echo 'Update package.json'
 package_contents=$(jq ".version = \"${newver}\"" package.json)
 echo "${package_contents}" > package.json
